@@ -40,4 +40,19 @@ public class DNAMutation {
         }
         return builder.toString();
     }
+
+    public String createRandomDNA(int length) {
+        if (length <= 0) {
+            throw new IllegalArgumentException("Number of bases generated must be greater than 0");
+        }
+        if (length % 3 != 0) {
+            throw new IllegalArgumentException("Number of bases must be divisible by 3");
+        } else {
+            StringBuilder builder = new StringBuilder(length);
+            for (int i = 0; i < length; i++) {
+                builder.append(BASES[random.nextInt(BASES.length)]);
+            }
+            return builder.toString();
+        }
+    }
 }
