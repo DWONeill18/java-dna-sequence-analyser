@@ -8,7 +8,12 @@ import java.util.Optional;
 import java.util.Scanner;
 
 /**
- * Console menu for executing DNA Lab workflows.
+ * Presents the DNA Lab console menu and runs the workflow selected by the user.
+ * <p>
+ * The menu receives its input and output streams through the constructor, which
+ * allows the workflows to be used with the console or alternate streams. Options
+ * include DNA matching, replication, transcription, random sequence generation,
+ * and random mutation; selecting option 9 ends the menu loop.
  */
 public class Menu {
 
@@ -17,7 +22,8 @@ public class Menu {
     private final PrintStream out;
 
     /**
-     * Creates a menu with injected input and output streams.
+     * Creates a menu that reads commands from the supplied scanner and writes
+     * prompts and results to the supplied stream.
      *
      * @param scanner scanner used for user input
      * @param out     output stream for menu prompts and messages
@@ -81,7 +87,11 @@ public class Menu {
     }
 
     /**
-     * Runs the main analysis loop until the user chooses Exit.
+     * Displays menu options and runs the selected workflow repeatedly until the
+     * user chooses option 9.
+     * <p>
+     * Invalid menu selections are rejected and the menu is shown again. Workflow
+     * input and file I/O errors are reported to the configured output stream.
      */
     public void analysisMenu() {
         boolean running = true;
@@ -317,13 +327,13 @@ public class Menu {
                 case 7 -> out.println("Reverse Transcription");
                 case 8 -> out.println(
                         "Option Information" + System.lineSeparator() +
-                        "1. DNA Match - Check whether suspect matches sample DNA" + System.lineSeparator() +
-                        "2. DNA Replication - Replicate a DNA strand to give both it's original and complemetary strands" + System.lineSeparator() +
-                        "3. DNA Transcription - Transcribe a DNA strand to its mRNA counterpart" + System.lineSeparator() +
-                        "4. mRNA Translation - Translate an mRNA strand to amino acids in a polypeptide chain" + System.lineSeparator() +
-                        "5. Random DNA Generator - Create a random DNA strand given a number of DNA bases" + System.lineSeparator() +
-                        "6. Random DNA Mutation - Insert a random DNA base into a DNA strand to cause a mutation" + System.lineSeparator() +
-                        "7. Reverse Transcription - Transcribe an RNA strand back to its DNA counterpart" + System.lineSeparator());
+                                "1. DNA Match - Check whether suspect matches sample DNA" + System.lineSeparator() +
+                                "2. DNA Replication - Replicate a DNA strand to give both it's original and complemetary strands" + System.lineSeparator() +
+                                "3. DNA Transcription - Transcribe a DNA strand to its mRNA counterpart" + System.lineSeparator() +
+                                "4. mRNA Translation - Translate an mRNA strand to amino acids in a polypeptide chain" + System.lineSeparator() +
+                                "5. Random DNA Generator - Create a random DNA strand given a number of DNA bases" + System.lineSeparator() +
+                                "6. Random DNA Mutation - Insert a random DNA base into a DNA strand to cause a mutation" + System.lineSeparator() +
+                                "7. Reverse Transcription - Transcribe an RNA strand back to its DNA counterpart" + System.lineSeparator());
                 case 9 -> {
                     out.println("Closing down the lab" + System.lineSeparator());
                     running = false;
