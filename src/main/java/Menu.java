@@ -221,7 +221,41 @@ public class Menu {
 
                 }
                 case 4 -> out.println("DNA Translation");
-                case 5 -> out.println("Random DNA Generator");
+                case 5 -> {
+
+                    out.println("Random DNA Generator");
+
+                    out.println("Enter number of random bases: ");
+                    scanner.nextLine();
+
+                    int baseCount;
+                    try {
+                        baseCount = Integer.parseInt(scanner.nextLine());
+                    } catch (NumberFormatException ex) {
+                        out.println("Invalid input, please enter a number.");
+                        break;
+                    }
+
+                    DNAMutation dnaMutation = new DNAMutation();
+                    String result;
+                    try {
+                        result = String.valueOf(dnaMutation.createRandomDNA(baseCount));
+                    } catch (IllegalArgumentException ex) {
+                        out.println(ex.getMessage());
+                        break;
+                    }
+
+                    out.print("Enter file path to output file: ");
+                    String outputFileName = scanner.nextLine();
+
+                    WriteDNA writeDNA = new WriteDNA();
+                    try {
+                        writeDNA.writeFile(outputFileName, result);
+                    } catch (IOException e) {
+                        out.println("Error while writing file");
+                    }
+
+                }
                 case 6 -> {
 
                     out.println("Mutation");
