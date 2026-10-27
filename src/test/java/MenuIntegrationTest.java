@@ -216,13 +216,38 @@ class MenuIntegrationTest {
     }
 
     /**
-     * Verifies option 5 prints the random DNA generator label and then exits.
+     * Verifies option 5 generates the requested DNA sequence and writes it to a file.
+     *
+     * @throws Exception when file IO fails
+     */
+    @Test
+    void analysisMenu_option5_generatesAndWritesRandomDna() throws Exception {
+        Path outputFile = tempDir.resolve("random-dna.txt");
+        String input = "5\n6\n" + outputFile + "\n9\n";
+        ByteArrayInputStream in = new ByteArrayInputStream(input.getBytes());
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+
+        Menu menu = new Menu(new Scanner(in), new PrintStream(out));
+        menu.analysisMenu();
+        String output = out.toString();
+        String generatedDna = Files.readString(outputFile);
+
+        assertTrue(output.contains("Random DNA Generator"));
+        assertTrue(output.contains("Enter number of random bases: "));
+        assertTrue(output.contains("Enter file path to output file: "));
+        assertTrue(output.contains("Closing down the lab"));
+        assertEquals(6, generatedDna.length());
+        assertTrue(generatedDna.matches("[ACGT]+"));
+    }
+
+    /**
+     * Verifies option 5 rejects a base count that is not divisible by three.
      *
      * @throws IOException when menu IO fails
      */
     @Test
-    void analysisMenu_option5_printsRandomDnaGenerator_andCloses() throws IOException {
-        String input = "5\n9\n";
+    void analysisMenu_option5_invalidBaseCount_doesNotPromptForOutputPath() throws IOException {
+        String input = "5\n4\n9\n";
         ByteArrayInputStream in = new ByteArrayInputStream(input.getBytes());
         ByteArrayOutputStream out = new ByteArrayOutputStream();
 
@@ -230,8 +255,9 @@ class MenuIntegrationTest {
         menu.analysisMenu();
         String output = out.toString();
 
-        assertTrue(output.contains("Random DNA Generator"));
+        assertTrue(output.contains("Number of bases must be divisible by 3"));
         assertTrue(output.contains("Closing down the lab"));
+        assertTrue(!output.contains("Enter file path to output file: "));
     }
 
     /**
