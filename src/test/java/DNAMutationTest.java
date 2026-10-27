@@ -14,6 +14,54 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 class DNAMutationTest {
 
     /**
+     * Verifies random DNA generation returns the requested number of valid bases.
+     */
+    @Test
+    void createRandomDNA_returnsRequestedLengthUsingDnaBases() {
+        DNAMutation mutation = new DNAMutation();
+
+        String result = mutation.createRandomDNA(6);
+
+        assertEquals(6, result.length());
+        assertTrue(result.matches("[ACGT]+"));
+    }
+
+    /**
+     * Verifies zero and negative generated lengths are rejected.
+     */
+    @Test
+    void createRandomDNA_nonPositiveLength_throwsException() {
+        DNAMutation mutation = new DNAMutation();
+
+        IllegalArgumentException zeroException = assertThrows(
+                IllegalArgumentException.class,
+                () -> mutation.createRandomDNA(0)
+        );
+        IllegalArgumentException negativeException = assertThrows(
+                IllegalArgumentException.class,
+                () -> mutation.createRandomDNA(-3)
+        );
+
+        assertEquals("Number of bases generated must be greater than 0", zeroException.getMessage());
+        assertEquals("Number of bases generated must be greater than 0", negativeException.getMessage());
+    }
+
+    /**
+     * Verifies generated lengths that are not divisible by three are rejected.
+     */
+    @Test
+    void createRandomDNA_lengthNotDivisibleByThree_throwsException() {
+        DNAMutation mutation = new DNAMutation();
+
+        IllegalArgumentException exception = assertThrows(
+                IllegalArgumentException.class,
+                () -> mutation.createRandomDNA(4)
+        );
+
+        assertEquals("Number of bases must be divisible by 3", exception.getMessage());
+    }
+
+    /**
      * Verifies mutation inserts a randomly generated base string into the codon list.
      */
     @Test
