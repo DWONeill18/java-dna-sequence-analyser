@@ -3,7 +3,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Inserts a randomly generated base sequence into a codon list.
+ * Generates random DNA sequences and inserts random sequences into codon lists.
+ * <p>
+ * Generated sequences use the DNA bases {@code A}, {@code C}, {@code G}, and
+ * {@code T}. Mutation insertions are required to contain a positive number of
+ * bases divisible by three so they contain complete codons.
  */
 public class DNAMutation {
 
@@ -39,5 +43,27 @@ public class DNAMutation {
             builder.append(BASES[random.nextInt(BASES.length)]);
         }
         return builder.toString();
+    }
+
+    /**
+     * Creates a random DNA sequence of the requested length.
+     *
+     * @param length number of bases to generate; must be positive and divisible by three
+     * @return a DNA sequence containing exactly {@code length} randomly selected bases
+     * @throws IllegalArgumentException if {@code length} is not positive or is not divisible by three
+     */
+    public String createRandomDNA(int length) {
+        if (length <= 0) {
+            throw new IllegalArgumentException("Number of bases generated must be greater than 0");
+        }
+        if (length % 3 != 0) {
+            throw new IllegalArgumentException("Number of bases must be divisible by 3");
+        } else {
+            StringBuilder builder = new StringBuilder(length);
+            for (int i = 0; i < length; i++) {
+                builder.append(BASES[random.nextInt(BASES.length)]);
+            }
+            return builder.toString();
+        }
     }
 }
