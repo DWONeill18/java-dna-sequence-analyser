@@ -1,6 +1,7 @@
 import DNAAnalysis.DNATranscription;
 import org.junit.jupiter.api.Test;
 
+import java.util.Arrays;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -52,6 +53,18 @@ public class DNATranscriptionTest {
         );
 
         assertEquals("Codon list must not be null or empty", exception.getMessage());
+    }
+
+    /**
+     * Verifies null codon entries are skipped while usable codons are transcribed.
+     */
+    @Test
+    void transcription_nullCodonEntry_isSkipped() {
+        DNATranscription dnaTranscription = new DNATranscription();
+
+        String result = dnaTranscription.transcription(Arrays.asList(null, "ACG"));
+
+        assertEquals("UGC", result);
     }
 
     /**
