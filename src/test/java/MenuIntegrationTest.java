@@ -9,8 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * Integration tests for {@link Menu} user flows.
@@ -258,6 +257,47 @@ class MenuIntegrationTest {
         assertTrue(output.contains("Number of bases must be divisible by 3"));
         assertTrue(output.contains("Closing down the lab"));
         assertTrue(!output.contains("Enter file path to output file: "));
+    }
+
+    /**
+     * Verifies option 5 reports a nonnumeric base count and skips the output prompt.
+     *
+     * @throws IOException when menu IO fails
+     */
+    @Test
+    void analysisMenu_option5_nonnumericBaseCount_doesNotPromptForOutputPath() throws IOException {
+        String input = "5\nabc\n9\n";
+        ByteArrayInputStream in = new ByteArrayInputStream(input.getBytes());
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+
+        Menu menu = new Menu(new Scanner(in), new PrintStream(out));
+        menu.analysisMenu();
+        String output = out.toString();
+
+        assertTrue(output.contains("Invalid input, please enter a number."));
+        assertTrue(output.contains("Closing down the lab"));
+        assertFalse(output.contains("Enter file path to output file: "));
+    }
+
+    /**
+     * Verifies option 5 reports a write failure when the destination is a directory.
+     *
+     * @throws IOException when menu IO fails
+     */
+    @Test
+    void analysisMenu_option5_writeFailure_printsError() throws IOException {
+        String input = "5\n6\n" + tempDir + "\n9\n";
+        ByteArrayInputStream in = new ByteArrayInputStream(input.getBytes());
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+
+        Menu menu = new Menu(new Scanner(in), new PrintStream(out));
+        menu.analysisMenu();
+        String output = out.toString();
+
+        assertTrue(output.contains("Random DNA Generator"));
+        assertTrue(output.contains("Enter file path to output file: "));
+        assertTrue(output.contains("Error while writing file"));
+        assertTrue(output.contains("Closing down the lab"));
     }
 
     /**
