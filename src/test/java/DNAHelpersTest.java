@@ -264,6 +264,28 @@ class DNAHelpersTest {
     }
 
     /**
+     * Ensures a null line from a Scanner implementation triggers a reprompt.
+     * A standard Scanner throws at end of input, so this exercises the
+     * defensive null check with a controlled Scanner subclass.
+     */
+    @Test
+    void countCodonOccurrences_repromptsOnNullInput() {
+        DNAHelpers helpers = new DNAHelpers();
+        int[] calls = {0};
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+
+        helpers.countCodonOccurrences(
+                List.of("ACG", "TGA"),
+                () -> calls[0]++ == 0 ? null : "ACG",
+                new PrintStream(out)
+        );
+
+        String output = out.toString();
+        assertTrue(output.contains("Invalid codon. Please enter a 3-letter codon using A, C, G, T."));
+        assertTrue(output.contains("Codon ACG appears 1 times."));
+    }
+
+    /**
      * Ensures internal whitespace still fails length validation.
      */
     @Test
