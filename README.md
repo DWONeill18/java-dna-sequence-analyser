@@ -11,6 +11,7 @@ This project demonstrates practical QA engineering skills as well as Java develo
 From a QA perspective, the project shows:
 
 - JUnit 5 unit tests for DNA helper and analysis logic
+- DNA helper tests cover codon validation, including null input and reprompt behavior
 - Integration-style tests for the interactive console menu
 - File input/output testing with sample resources
 - Validation and negative-path test coverage
@@ -30,7 +31,7 @@ From a QA perspective, the project shows:
 - File output for generated results
 - Information menu describing available workflows
 
-Some menu options are currently placeholders for future development, including DNA translation, random DNA generation, and reverse transcription.
+Some menu options are currently placeholders for future development, including DNA translation and reverse transcription.
 
 ## Tech Stack
 
@@ -155,7 +156,14 @@ Placeholder option for future DNA translation functionality.
 
 ### 5. Random DNA Generator
 
-Placeholder option for future random DNA sequence generation.
+Generates a random DNA sequence and writes it to an output file. Enter a positive number of bases divisible by three; generated sequences use the bases A, C, G, and T.
+
+```text
+Enter option (1-9): 5
+Random DNA Generator
+Enter number of random bases: 9
+Enter file path to output file: out/random-dna.txt
+```
 
 ### 6. Random DNA Mutation
 

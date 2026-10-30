@@ -264,9 +264,9 @@ class DNAHelpersTest {
     }
 
     /**
-     * Ensures a null line from a Scanner implementation triggers a reprompt.
-     * A standard Scanner throws at end of input, so this exercises the
-     * defensive null check with a controlled Scanner subclass.
+     * Ensures a null line from the input supplier triggers a reprompt.
+     * The supplier makes the defensive null-input branch directly testable;
+     * a standard Scanner throws at end of input instead of returning null.
      */
     @Test
     void countCodonOccurrences_repromptsOnNullInput() {
