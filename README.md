@@ -207,6 +207,22 @@ Closing down the lab
 
 DNA input is trimmed and converted to uppercase before codon splitting. The sequence length must be divisible by three. Analysis operations require the bases A, C, G, and T. Empty or missing input files are reported and the selected workflow is skipped.
 
+
+## GitHub Actions and JaCoCo Comparison
+
+The `Java CI with Maven` workflow in `.github/workflows/maven.yml` runs on pushes and pull requests targeting `main`. It uses Ubuntu and Java 21 (Temurin), with Maven dependency caching enabled.
+
+For each run, the workflow executes `mvn clean verify`, which runs the tests and creates the JaCoCo report. It uploads `target/site/jacoco/` as the `jacoco-report` artifact. On pushes to `main`, it also submits the Maven dependency graph to GitHub.
+
+For pull requests, the workflow checks out the target branch revision into `baseline`, builds and verifies that revision, and compares its coverage with the pull request. The script `scripts/compare_jacoco.py`:
+
+- Runs each `*Test.java` test class separately against the baseline and pull request code, collecting per-test JaCoCo execution data.
+- Compares overall instruction, line, and branch coverage percentages from the JaCoCo XML reports.
+- Identifies production source lines that were covered on the baseline but are uncovered in the pull request.
+- Lists baseline test classes that covered affected lines and indicates whether those classes still cover them in the pull request.
+- Writes a Markdown report to `coverage-comment.md`, which the workflow posts as an updating pull request comment.
+
+The test associations are evidence about which isolated test classes exercised affected lines; they do not identify which test caused a regression. Isolated test failures or missing coverage data are reported as warnings in the comparison. The script reports coverage changes but does not enforce a minimum coverage threshold.
 ## Future Improvements
 
 - Add full DNA translation functionality
@@ -214,3 +230,4 @@ DNA input is trimmed and converted to uppercase before codon splitting. The sequ
 - Introduce domain classes such as `DNASequence` and `Codon`
 - Improve output formatting for mutation results
 - Expand CI checks to include coverage thresholds and static analysis
+
